@@ -1,0 +1,19 @@
+@import "theme.css";
+@import "general.css";
+@import "components/index.css";
+
+
+.sum-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    border-radius: 5px;
+    padding: 20px;
+}
+  
+.sum-text {
+    font-size: 36px;
+    font-weight: bold;
+}
+  
