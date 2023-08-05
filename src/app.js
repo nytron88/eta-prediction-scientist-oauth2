@@ -28,7 +28,7 @@ export const App = () => {
         element={<AuthenticationGuard component={ProfilePage} />}
       />
       <Route
-        path="/sum"
+        path="/scientist"
         element={<AuthenticationGuard component={ScientistPage} />}
       />
       <Route path="/callback" element={<CallbackPage />} />

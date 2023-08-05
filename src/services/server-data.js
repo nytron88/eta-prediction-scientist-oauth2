@@ -10,7 +10,7 @@ export const getServerResources = async (accessToken) => {
     const errorData = []
     for (let i = 0; i < apiServerUrls.length; i++) {
         const config = {
-            url: `${apiServerUrls[i]}/api/scientist/get_sum`,
+            url: `${apiServerUrls[i]}/api/scientist/get_eta_data`,
             method: "GET",
             headers: {
             "content-type": "application/json",
