@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { CodeSnippet } from "../components/code-snippet";
 import { PageLayout } from "../components/page-layout";
 
@@ -9,17 +9,16 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     const getAccessToken = async () => {
-      const token = await getAccessTokenSilently();
-      setAccessToken(token);
-    }
-
+      const accessToken = await getAccessTokenSilently();
+      setAccessToken(accessToken)
+    };
     getAccessToken();
-
-  }, [getAccessTokenSilently()])
+  }, [getAccessTokenSilently]);
 
   if (!user) {
     return null;
   }
+
   return (
     <PageLayout>
       <div className="content-layout">
@@ -29,8 +28,7 @@ export const ProfilePage = () => {
         <div className="content__body">
           <p id="page-description">
             <span>
-              You can use the <strong>ID Token</strong> to get the profile
-              information of an authenticated user.
+              You can use the <strong>Access Token</strong> to run cURL commands or use API clients like Postman.
             </span>
             <span>
               <strong>Only authenticated users can access this page.</strong>
@@ -48,10 +46,16 @@ export const ProfilePage = () => {
                 <span className="profile__description">{user.email}</span>
               </div>
             </div>
+            {/* <div className="profile__details">
+              <CodeSnippet
+                title="Decoded ID Token"
+                code={JSON.stringify(user, null, 2)}
+              />
+            </div> */}
             <div className="profile__details">
               <CodeSnippet
-                title="User Details"
-                code={JSON.stringify(user, null, 2) + "\nAccess Token: " + accessToken}
+                title="Access token"
+                code={accessToken}
               />
             </div>
           </div>

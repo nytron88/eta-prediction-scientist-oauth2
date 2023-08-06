@@ -51,11 +51,9 @@
 }
 
 .hero-banner__image {
-  width: 15rem;
+  width: 10.8rem;
   height: 10.8rem;
-  border-radius: 10%;
 }
-
 
 .hero-banner__image--small {
   width: 7.6rem;

@@ -1,53 +1,68 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import React, { useEffect, useState } from "react";
+import { CodeSnippet } from "../components/code-snippet";
 import { PageLayout } from "../components/page-layout";
+import { getPermissionsResource, getScientistResource } from "../services/api.service";
 import Chart from "react-google-charts";
-import { getServerResources } from "../services/server-data";
+import { first } from "lodash";
 
 export const ScientistPage = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [accessToken, setAccessToken] = useState("");
-  
-  const [message, setMessage] = useState("")
-
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [message, setMessage] = useState("");
   const [binsDisplay, setBinsDisplay] = useState([
     ["Category", "Value"],
-    ["Sum Bin 1", 0],
-    ["Sum Bin 2", 0],
-    ["Sum Bin 3", 0],
-    ["Sum Bin 4", 0],
-    ["Sum Bin 5", 0],
-    ["Sum Bin 6", 0],
-    ["Sum Bin 7", 0],
-    ["Sum Bin 8", 0],
-    ["Sum Bin 9", 0],
-    ["Sum Bin 10", 0],
+    ["ETA 1", 0],
+    ["ETA 2", 0],
+    ["ETA 3", 0],
+    ["ETA 4", 0],
+    ["ETA 5", 0],
+    ["ETA 6", 0],
+    ["ETA 7", 0],
+    ["ETA 8", 0],
+    ["ETA 9", 0],
+    ["ETA 10", 0],
   ])
 
   useEffect(() => {
     const getAccessToken = async () => {
-      const token = await getAccessTokenSilently();
-      setAccessToken(token);
-    }
+      const accessToken = await getAccessTokenSilently();
+      setAccessToken(accessToken);
+    };
 
     getAccessToken();
 
-  }, [getAccessTokenSilently])
+  }, [getAccessTokenSilently]);
 
   useEffect(() => {
-    const interval = setInterval(updateTable, 1000);
-    return () => clearInterval(interval);
-  });
+    const getPermission = async () => {
+      const firstTimeAccessToken = await getAccessTokenSilently();
+      const { data, error } = await getPermissionsResource(firstTimeAccessToken);
+      const isAuthorized = data.permissions.indexOf("get:eta-data") > -1;
+      setIsAuthorized(isAuthorized)
+      
+    };
 
+    getPermission();
+
+  }, []);
+
+  useEffect(() => {
+    if (isAuthorized) {
+      const interval = setInterval(updateTable, 5000);
+      return () => clearInterval(interval);
+    }
+  });
   
   const updateTable = async () => {
-    const {data, errorData} = await getServerResources(accessToken);
-    
-    const dataServerOne = data[0];
-    const errorServerOne = errorData[0];
-    const dataServerTwo = data[1];
-    const errorServerTwo = errorData[1];
+    const { responses } = await getScientistResource(accessToken);
 
+    const dataServerOne = responses[0].data;
+    const dataServerTwo = responses[0].data;
+    const errorServerOne = responses[0].error;
+    const errorServerTwo = responses[0].error;
+    
     if (dataServerOne.message === "You don't have access to this resource") {
       setMessage("You don't have access to this resource!")
     } else if (errorServerOne) {
@@ -66,7 +81,7 @@ export const ScientistPage = () => {
         }
         const newBinsDisplay = [["Category", "Value"]];
         for (let i = 0; i < finalSum.length; i++) {
-        newBinsDisplay.push([`Sum Bin ${i + 1}`, finalSum[i]]);
+        newBinsDisplay.push([`ETA ${i + 1}`, finalSum[i]]);
         }
         setBinsDisplay(newBinsDisplay);
       } else if (dataServerTwo.message.length > dataServerOne.message.length){
@@ -75,7 +90,7 @@ export const ScientistPage = () => {
         }
         const newBinsDisplay = [["Category", "Value"]];
         for (let i = 0; i < finalSum.length; i++) {
-        newBinsDisplay.push([`Sum Bin ${i + 1}`, finalSum[i]]);
+        newBinsDisplay.push([`ETA ${i + 1}`, finalSum[i]]);
         }
         setBinsDisplay(newBinsDisplay);
       }
@@ -85,7 +100,7 @@ export const ScientistPage = () => {
 
   const optionsLoad = () => {
     const options = {
-      title: "Final Sum",
+      title: "ETA Data",
       legend: { position: "none" },
       colors: ["#e7711c"],
       vAxis: {
@@ -109,38 +124,65 @@ export const ScientistPage = () => {
     return options;
   };
 
-
-  return (
-    <PageLayout>
-      <div className="content-layout">
-        <h1 id="page-title" className="content__title">
-          {message}
-        </h1>
-        <div className="content__body">
-          <p id="page-description">
-            <span>
-              This page retrieves <strong>the sum</strong> from an
-              external API.
-            </span>
-            <span>
+  if (!isAuthorized) {
+    return (
+      <PageLayout>
+        <div className="content-layout">
+          <h1 id="page-title" className="content__title">
+            Protected Page
+          </h1>
+          <div className="content__body">
+            <p id="page-description">
+              <span>
+              This page retrieves the ETA prediction data enetred by users and displays it on a self-refreshing histogram.
+              </span>
+              <span>
               <strong>
                 Only authenticated users with the{" "}
-                <code>get:eta-data</code> permission should access this
+                <code>scientist</code> role should access this
                 page.
               </strong>
             </span>
-          </p>
-          <div>
-            <Chart
-            className="sum-container"
-              chartType="ColumnChart" 
-              height="400px"
-              data={binsDisplay}
-              options={optionsLoad()}
-            />
+            </p>
+            <CodeSnippet title="Unauthorized!!!" code="You don't have permission to access this resource. Please contact the administrator." />
           </div>
         </div>
-      </div>
-    </PageLayout>
-  );
-}
+      </PageLayout>
+    );
+
+  } else {
+    return (
+      <PageLayout>
+        <div className="content-layout">
+          <h1 id="page-title" className="content__title">
+            Scientist Zone
+          </h1>
+          <div className="content__body">
+            <p id="page-description">
+              <span>
+                This page retrieves the ETA prediction data enetred by users and displays it on a self-refreshing histogram.
+              </span>
+              <span>
+                <strong>
+                  Only authenticated users with the{" "}
+                  <code>scientist</code> role should access this
+                  page.
+                </strong>
+              </span>
+            </p>
+            
+            <div>
+              <Chart
+              className="sum-container"
+                chartType="ColumnChart" 
+                height="400px"
+                data={binsDisplay}
+                options={optionsLoad()}
+              />
+            </div>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+};

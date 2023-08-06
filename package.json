@@ -5,19 +5,20 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.0.0",
     "axios": "^0.27.2",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-google-charts": "^4.0.1",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "react-toastify": "^9.1.3"
   },
   "scripts": {
     "start": "cross-env PORT=8981 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .js,.jsx --fix --ignore-path .gitignore",
-    "api": "json-server --host 0.0.0.0 --port 6060 --watch json-server/db.json --routes json-server/routes.json"
+    "lint": "eslint . --ext .js,.jsx --fix --ignore-path .gitignore"
   },
   "eslintConfig": {
     "extends": [
