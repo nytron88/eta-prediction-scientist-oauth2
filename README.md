@@ -15,7 +15,7 @@ The app is integrated with [Auth0](https://auth0.com) for authnetication and aut
 1. Checkout the code and change into the project directory:
    
    ```
-   git clone https://github.com/your-username/eta-prediction-scientist-oauth2.git
+   git clone https://github.com/nytron88/eta-prediction-scientist-oauth2.git
    
    cd eta-prediction-scientist-oauth2
    ```
