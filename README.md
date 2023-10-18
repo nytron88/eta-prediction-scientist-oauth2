@@ -1,7 +1,7 @@
 # OAuth2 based ETA Prediction for data scientists
 **This is reference implementation for the users with "developer" role who can follow the code to develop newer versions**
 
-This is React.js app that allows the data scientists to get the ETA data posted by users on a histogram. This app gets the data from API hosted by the [Privacy Guardian](https://github.com/nytron88/eta-prediction-privacy-guardian-oauth2). The app requested data from 2 instances of the Privacy Guardian: R_SEVER and X_R_SERVER. The UI refreshes itself automatically at regular intervals to update the histogram.
+This is React.js app that allows the data scientists to get the ETA data posted by users on a histogram. This app gets the data from API hosted by the [Privacy Guardian](https://github.com/nytron88/eta-prediction-privacy-guardian-oauth2). The app requests data from 2 instances of the Privacy Guardian: R_SEVER and X_R_SERVER. The UI refreshes itself automatically at regular intervals to update the histogram.
 
 The app is integrated with [Auth0](https://auth0.com) for authnetication and authorization. The typical flow is:
 ![image](https://github.com/nytron88/eta-prediction-scientist-oauth2/assets/79620454/7bf2b9ca-247f-4133-a53e-d3dcd7939a55)
